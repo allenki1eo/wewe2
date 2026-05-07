@@ -1,0 +1,209 @@
+{
+  "name": "openweb-vscode-integration",
+  "displayName": "OpenWeb AI Assistant",
+  "description": "AI-powered VS Code extension with chat, GitHub integration, code generation, and project management",
+  "version": "0.1.0",
+  "publisher": "openweb",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["AI", "Other", "SCM Providers"],
+  "keywords": ["ai", "chat", "github", "code-generation", "copilot"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "openweb",
+          "title": "OpenWeb AI",
+          "icon": "media/icons/openweb.svg"
+        }
+      ]
+    },
+    "views": {
+      "openweb": [
+        {
+          "id": "openweb.chat",
+          "name": "AI Chat",
+          "type": "webview",
+          "icon": "media/icons/chat.svg"
+        },
+        {
+          "id": "openweb.github",
+          "name": "GitHub",
+          "icon": "media/icons/github.svg"
+        },
+        {
+          "id": "openweb.project",
+          "name": "Project",
+          "icon": "media/icons/project.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "openweb.openChat",
+        "title": "OpenWeb: Open AI Chat"
+      },
+      {
+        "command": "openweb.explainCode",
+        "title": "OpenWeb: Explain Selected Code"
+      },
+      {
+        "command": "openweb.generateCode",
+        "title": "OpenWeb: Generate Code from Comment"
+      },
+      {
+        "command": "openweb.generateDocs",
+        "title": "OpenWeb: Generate Documentation"
+      },
+      {
+        "command": "openweb.generateTests",
+        "title": "OpenWeb: Generate Tests"
+      },
+      {
+        "command": "openweb.refactorCode",
+        "title": "OpenWeb: Refactor Selected Code"
+      },
+      {
+        "command": "openweb.gitCommit",
+        "title": "OpenWeb: AI-Assisted Commit"
+      },
+      {
+        "command": "openweb.gitPush",
+        "title": "OpenWeb: Push to Remote"
+      },
+      {
+        "command": "openweb.createIssue",
+        "title": "OpenWeb: Create GitHub Issue"
+      },
+      {
+        "command": "openweb.createPR",
+        "title": "OpenWeb: Create Pull Request"
+      },
+      {
+        "command": "openweb.browseRepo",
+        "title": "OpenWeb: Browse Repository"
+      },
+      {
+        "command": "openweb.addTask",
+        "title": "OpenWeb: Add Project Task"
+      },
+      {
+        "command": "openweb.showFileTree",
+        "title": "OpenWeb: Show File Structure"
+      },
+      {
+        "command": "openweb.configure",
+        "title": "OpenWeb: Configure Settings"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "openweb.explainCode",
+          "when": "editorHasSelection",
+          "group": "openweb@1"
+        },
+        {
+          "command": "openweb.refactorCode",
+          "when": "editorHasSelection",
+          "group": "openweb@2"
+        },
+        {
+          "command": "openweb.generateDocs",
+          "when": "editorHasSelection",
+          "group": "openweb@3"
+        },
+        {
+          "command": "openweb.generateTests",
+          "when": "editorHasSelection",
+          "group": "openweb@4"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "openweb.gitCommit",
+          "group": "openweb"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "OpenWeb AI Assistant",
+      "properties": {
+        "openweb.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "OpenWeb UI backend API URL"
+        },
+        "openweb.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for OpenWeb UI"
+        },
+        "openweb.model": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "Default AI model to use"
+        },
+        "openweb.githubToken": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub personal access token"
+        },
+        "openweb.contextLines": {
+          "type": "number",
+          "default": 50,
+          "description": "Number of context lines to include around selections"
+        },
+        "openweb.autoContext": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically include current file context in chat"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "openweb.openChat",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "openweb.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "openweb.generateCode",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.3.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "axios": "^1.6.2"
+  }
+}
